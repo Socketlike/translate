@@ -31,6 +31,10 @@ export default (name) => {
   // Let's work with lowercase for everything
   name = name.toLowerCase();
 
+  // ignore "auto"
+  if (name === "auto")
+    return name;
+
   // Pass it through several possible maps to try to find the right one
   name = names[name] || iso[name] || name;
 
