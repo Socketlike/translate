@@ -33,13 +33,17 @@ export const translate = async <Engines extends Record<string, Engine> = Record<
 
   const fromRaw = opt.from || typeof opt.from === 'string' ? opt.from : 'en'
   const from =
-    (engine.extraSourceLanguages?.includes?.(fromRaw) && fromRaw) ||
-    ISO6391.getCode(fromRaw) ||
-    'en'
+    ((engine.extraSourceLanguages?.includes?.(fromRaw) || ISO6391.validate(fromRaw)) && fromRaw) ||
+    undefined
 
   const toRaw = opt.to || typeof opt.to === 'string' ? opt.to : 'en'
   const to =
-    (engine.extraTargetLanguages?.includes?.(toRaw) && toRaw) || ISO6391.getCode(toRaw) || 'en'
+    ((engine.extraTargetLanguages?.includes?.(toRaw) || ISO6391.validate(toRaw)) && toRaw) ||
+    undefined
+
+  if (typeof from === 'undefined') throw new Error(`unsupported source language "${from}"`)
+
+  if (typeof to === 'undefined') throw new Error(`unsupported target language "${to}"`)
 
   if (from === to) return text
 
