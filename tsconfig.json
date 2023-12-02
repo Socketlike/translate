@@ -1,1 +1,35 @@
-{ "exclude": ["node_modules"] }
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+
+    "baseUrl": "./",
+
+    "declarationDir": "./dist",
+
+    "esModuleInterop": true,
+
+    "forceConsistentCasingInFileNames": true,
+
+    "lib": ["ES6"],
+
+    "module": "CommonJS",
+
+    "moduleResolution": "Node",
+
+    "noImplicitAny": true,
+
+    "outDir": "./dist",
+
+    "paths": {
+      "@*": ["src/*"]
+    },
+
+    "resolveJsonModule": true,
+
+    "skipLibCheck": true,
+
+    "strict": true,
+
+    "target": "ES6"
+  }
+}
