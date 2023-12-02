@@ -23,7 +23,7 @@ jobs:
                   node-version: 18
 
             - name: Setup PNPM
-              uses: pnpm/action-setup@v2.4.0
+              uses: pnpm/action-setup@master
               with:
                   version: latest
 
