@@ -3,7 +3,7 @@ import { Engine } from '@types'
 export const deepl: Engine = {
   needkey: true,
   fetch: ({ key, from, to, text }) => [
-    new URL('v2/translate', `https://api${/:fx$/.test(key) ? '-free' : ''}.deepl.com`),
+    new URL('v2/translate', `https://api${key?.endsWith?.(':fx') ? '-free' : ''}.deepl.com`),
     {
       method: 'POST',
       headers: {

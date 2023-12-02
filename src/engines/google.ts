@@ -11,7 +11,7 @@ export const google: Engine = {
   parse: (res) =>
     res.json().then((_) => {
       const body = _ as string[][]
-      const translation = body && body[0] && body[0][0] && body[0].map((t) => t[0]).join('')
+      const translation = body?.[0]?.[0] && body[0].map((t) => t[0]).join('')
 
       if (!translation) throw new Error('translation not found')
 

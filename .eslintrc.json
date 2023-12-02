@@ -105,7 +105,9 @@
       "extends": ["eslint-config-dmitmel/rules/typescript/with-type-checking"],
 
       "rules": {
-        "@typescript-eslint/no-unnecessary-condition": "off"
+        "@typescript-eslint/no-unnecessary-condition": "off",
+
+        "@typescript-eslint/naming-convention": "off"
       },
 
       "parserOptions": {

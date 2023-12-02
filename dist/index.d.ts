@@ -1,3 +1,7 @@
+import { LanguageCode } from 'iso-639-1';
+export { default as Languages } from 'iso-639-1';
+import { LiteralUnion } from 'type-fest';
+
 declare const _default: {
     readonly deepl: Engine;
     readonly google: Engine;
@@ -8,10 +12,10 @@ declare const _default: {
 
 type Engine = {
     fetch: (options: {
-        from: string;
+        from: LiteralUnion<LanguageCode, string>;
         key: string;
         text: string;
-        to: string;
+        to: LiteralUnion<LanguageCode, string>;
         url?: string;
     }) => [string | URL, RequestInit?];
     extraSourceLanguages?: string[];
@@ -20,10 +24,10 @@ type Engine = {
     parse: (res: Response) => string | Promise<string>;
 } | {
     fetch: (options: {
-        from: string;
+        from: LiteralUnion<LanguageCode, string>;
         key?: string;
         text: string;
-        to: string;
+        to: LiteralUnion<LanguageCode, string>;
         url?: string;
     }) => [string | URL, RequestInit?];
     extraSourceLanguages?: string[];
@@ -33,9 +37,9 @@ type Engine = {
 };
 interface Options<CustomEngines extends Record<string, Engine> = Record<string, Engine>> {
     /** source language - default: 'en' */
-    from?: string;
+    from?: LiteralUnion<LanguageCode, string>;
     /** target language - default: 'en' */
-    to?: string;
+    to?: LiteralUnion<LanguageCode, string>;
     /** api key */
     key?: string;
     /** translation engine name - default: 'google' */
@@ -48,6 +52,6 @@ interface Options<CustomEngines extends Record<string, Engine> = Record<string, 
     cache?: number;
 }
 
-declare const translate: <CustomEngines extends Record<string, Engine> = Record<string, Engine>>(text: string, options?: Options<CustomEngines> | undefined) => Promise<string>;
+declare const translate: <Engines extends Record<string, Engine> = Record<string, Engine>>(text: string, options?: string | Options<Engines> | undefined) => Promise<string>;
 
-export { Engine, Options, translate as default, translate };
+export { type Engine, type Options, translate as default, translate };
