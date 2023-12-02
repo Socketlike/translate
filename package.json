@@ -5,7 +5,7 @@
   "homepage": "https://github.com/Socketlike/translate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Socketlike/translate"
+    "url": "git+https://github.com/Socketlike/translate.git"
   },
   "engines": {
     "node": ">=18.0.0"
