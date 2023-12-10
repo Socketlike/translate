@@ -11,6 +11,9 @@ or [DeepL](https://www.deepl.com/en/translator)
 ## What are the differences of this fork and upstream?
 
 - [Lingva](https://lingva.ml) support
+- [Google's `TranslateWebserverUi` endpoint (Google Translate webapp)](https://translate.google.com)
+  support
+- Google's `client5.google.com/translate_a/t` endpoint (Google Dictionary browser extension) support
 - Written in TypeScript and hopefully has better typings
 - Uses `iso-639-1` instead of hardcoded list (exported as `Languages`)
 - Dropped support for `ISO-639-2`
@@ -81,6 +84,9 @@ Default engines (use by setting the `engine` option):
 
 - **`google`**: ([demo](https://translate.google.com/) |
   [docs](https://cloud.google.com/translate/docs/)): Google Translate.
+- **`google_batchexecute`**: ([demo](https://translate.google.com)): Google Translate (used for the
+  Translate webapp)
+- **`google_dict_chrome_ex`**: Google Translate (Google Dictionary browser extension)
 - **`yandex`**: ([demo](https://translate.yandex.com/) | [docs](https://tech.yandex.com/translate/)
   | [API Key](https://translate.yandex.com/developers/keys)): Yandex Translate
 - **`libre`**: ([demo](https://libretranslate.com/)): An independent translation engine. You can use
@@ -144,6 +150,10 @@ await translate('test', { engines: { localhost }, engine: 'localhost', from: 'au
   .then(console.log)
   .catch(console.error)
 ```
+
+## Acknowledgement
+
+- [libmozhi](https://codeberg.org/aryak/libmozhi) for its Google Translate frontend implementation
 
 ## Acknowledgement (upstream)
 

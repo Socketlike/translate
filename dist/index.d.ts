@@ -5,6 +5,8 @@ import { LiteralUnion } from 'type-fest';
 declare const _default: {
     readonly deepl: Engine;
     readonly google: Engine;
+    readonly google_batchexecute: Engine;
+    readonly google_dict_chrome_ex: Engine;
     readonly libre: Engine;
     readonly lingva: Engine;
     readonly yandex: Engine;
