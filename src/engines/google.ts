@@ -4,10 +4,11 @@ export const google: Engine = {
   needkey: false,
   fetch: ({ from, to, text }) => [
     new URL(
-      `translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}`,
-      'https://translate.googleapis.com',
+      `translate_a/single?client=at&sl=${from}&tl=${to}&dt=t&q=${text}`,
+      'https://translate.google.com',
     ),
   ],
+  extraSourceLanguages: ['auto'],
   parse: (res) =>
     res.json().then((_) => {
       const body = _ as string[][]
