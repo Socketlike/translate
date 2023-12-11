@@ -12,8 +12,9 @@ or [DeepL](https://www.deepl.com/en/translator)
 
 - [Lingva](https://lingva.ml) support
 - [Google's `TranslateWebserverUi` endpoint (Google Translate webapp)](https://translate.google.com)
+  , `client5.google.com/translate_a/t` endpoint (Google Dictionary browser extension) and
+  [Google Cloud Translation REST API](https://cloud.google.com/translate/docs/reference/rest/v2/translate)
   support
-- Google's `client5.google.com/translate_a/t` endpoint (Google Dictionary browser extension) support
 - Written in TypeScript and hopefully has better typings
 - Uses `iso-639-1` instead of hardcoded list (exported as `Languages`)
 - Dropped support for `ISO-639-2`
@@ -85,8 +86,11 @@ Default engines (use by setting the `engine` option):
 - **`google`**: ([demo](https://translate.google.com/) |
   [docs](https://cloud.google.com/translate/docs/)): Google Translate.
 - **`google_batchexecute`**: ([demo](https://translate.google.com)): Google Translate (used for the
-  Translate webapp)
+  Translate webapp, **doesn't work if Referer or Origin header is set to something else other than
+  translate.google.com?**)
 - **`google_dict_chrome_ex`**: Google Translate (Google Dictionary browser extension)
+- **`google_cloud`**: ([docs](https://cloud.google.com/translate/docs/reference/rest/v2/translate))
+  Google Cloud Translation REST API.
 - **`yandex`**: ([demo](https://translate.yandex.com/) | [docs](https://tech.yandex.com/translate/)
   | [API Key](https://translate.yandex.com/developers/keys)): Yandex Translate
 - **`libre`**: ([demo](https://libretranslate.com/)): An independent translation engine. You can use

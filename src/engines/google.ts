@@ -2,9 +2,9 @@ import { Engine } from '@types'
 
 export const google: Engine = {
   needkey: false,
-  fetch: ({ from, to, text }) => [
+  fetch: ({ from: sl, to: tl, text: q }) => [
     new URL(
-      `translate_a/single?client=at&sl=${from}&tl=${to}&dt=t&q=${text}`,
+      `translate_a/single?${new URLSearchParams({ client: 'at', sl, tl, dt: 't', q })}`,
       'https://translate.google.com',
     ),
   ],
@@ -67,9 +67,9 @@ export const google_batchexecute: Engine = {
 /** the same one used in the Google Dictionary extension */
 export const google_dict_chrome_ex: Engine = {
   needkey: false,
-  fetch: ({ from, to, text }) => [
+  fetch: ({ from: sl, to: tl, text: q }) => [
     new URL(
-      `translate_a/t?client=dict-chrome-ex&sl=${from}&tl=${to}&q=${text}`,
+      `translate_a/t?${new URLSearchParams({ client: 'dict-chrome-ex', sl, tl, q })}`,
       'https://clients5.google.com',
     ),
   ],
@@ -84,6 +84,37 @@ export const google_dict_chrome_ex: Engine = {
       if (!body?.[0]?.[0]) throw new Error('no response')
 
       return body[0][0]
+    })
+  },
+}
+
+export const google_cloud: Engine = {
+  needkey: true,
+  fetch: ({ from: source, key, text: q, to: target }) => [
+    new URL(
+      `language/translate/v2?${new URLSearchParams({
+        key,
+        model: 'nmt',
+        q,
+        source,
+        target,
+      })}`,
+    ),
+  ],
+  extraSourceLanguages: ['auto'],
+  parse: async (res) => {
+    if (!res.ok) throw new Error(`http ${res.status}`)
+
+    return await res.json().then((_) => {
+      const body = _ as {
+        data: {
+          translations: Array<{ translatedText: string }>
+        }
+      }
+
+      if (!body?.data?.translations) throw new Error('no response')
+
+      return body.data.translations.map(({ translatedText }) => translatedText).join('')
     })
   },
 }

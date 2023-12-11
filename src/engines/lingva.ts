@@ -3,7 +3,10 @@ import { Engine } from '@types'
 export const lingva: Engine = {
   needkey: false,
   fetch: ({ url, from, to, text }) => [
-    new URL(`api/v1/${from}/${to}/${text}`, url || 'https://lingva.ml'),
+    new URL(
+      `api/v1/${encodeURIComponent(from)}/${encodeURIComponent(to)}/${encodeURIComponent(text)}`,
+      url || 'https://lingva.ml',
+    ),
   ],
   extraSourceLanguages: ['auto'],
   parse: (res) =>
