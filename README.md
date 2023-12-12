@@ -57,7 +57,12 @@ console.log(text) // "Hola mundo"
 ## Options
 
 ```ts
-export interface Options<CustomEngines extends Record<string, Engine> = Record<string, Engine>> {
+export interface Options<
+  Engines extends Record<string, Engine> = Record<never, Engine>,
+  EngineName extends keyof typeof defaultEngines | keyof Engines =
+    | keyof typeof defaultEngines
+    | keyof Engines,
+> {
   /** source language - default: 'en' */
   from?: LiteralUnion<LanguageCode, string>
   /** target language - default: 'en' */
@@ -67,9 +72,9 @@ export interface Options<CustomEngines extends Record<string, Engine> = Record<s
   key?: string
 
   /** translation engine name - default: 'google' */
-  engine?: keyof typeof defaultEngines | keyof CustomEngines
+  engine?: EngineName
   /** custom engines definition */
-  engines?: CustomEngines
+  engines?: Engines
 
   /** custom url for specific engines */
   url?: string

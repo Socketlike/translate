@@ -32,7 +32,7 @@ export type Engine =
     }
 
 export interface Options<
-  Engines extends Record<string, Engine> = Record<string, Engine>,
+  Engines extends Record<string, Engine> = Record<never, Engine>,
   EngineName extends keyof typeof defaultEngines | keyof Engines =
     | keyof typeof defaultEngines
     | keyof Engines,
