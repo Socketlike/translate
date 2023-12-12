@@ -37,7 +37,7 @@ type Engine = {
     needkey: false;
     parse: (res: Response) => string | Promise<string>;
 };
-interface Options<CustomEngines extends Record<string, Engine> = Record<string, Engine>> {
+interface Options<Engines extends Record<string, Engine> = Record<never, Engine>, EngineName extends keyof typeof _default | keyof Engines = keyof typeof _default | keyof Engines> {
     /** source language - default: 'en' */
     from?: LiteralUnion<LanguageCode, string>;
     /** target language - default: 'en' */
@@ -45,15 +45,15 @@ interface Options<CustomEngines extends Record<string, Engine> = Record<string, 
     /** api key */
     key?: string;
     /** translation engine name - default: 'google' */
-    engine?: keyof typeof _default | keyof CustomEngines;
+    engine?: EngineName;
     /** custom engines definition */
-    engines?: CustomEngines;
+    engines?: Engines;
     /** custom url for specific engines */
     url?: string;
     /** cache expiration time, default: never */
     cache?: number;
 }
 
-declare const translate: <Engines extends Record<string, Engine> = Record<string, Engine>>(text: string, options?: string | Options<Engines> | undefined) => Promise<string>;
+declare const translate: <Engines extends Record<string, Engine> = Record<never, Engine>>(text: string, options?: Options<Engines, "deepl" | "google" | "google_batchexecute" | "google_dict_chrome_ex" | "libre" | "lingva" | "yandex" | keyof Engines> | undefined) => Promise<string>;
 
 export { type Engine, type Options, translate as default, translate };
