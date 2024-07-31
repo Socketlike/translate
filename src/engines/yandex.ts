@@ -1,4 +1,4 @@
-import { Engine } from '@types'
+import { Engine } from '../types'
 
 export const yandex: Engine = {
   needkey: true,

@@ -1,12 +1,13 @@
 import { LanguageCode } from 'iso-639-1'
 import { LiteralUnion } from 'type-fest'
 
-import defaultEngines from '@engines'
+import defaultEngines from './engines'
 
 export type Engine =
   | {
       fetch: (options: {
         from: LiteralUnion<LanguageCode, string>
+        overrideParams?: Record<string, string>
         key: string
         text: string
         to: LiteralUnion<LanguageCode, string>
@@ -20,6 +21,7 @@ export type Engine =
   | {
       fetch: (options: {
         from: LiteralUnion<LanguageCode, string>
+        overrideParams?: Record<string, string>
         key?: string
         text: string
         to: LiteralUnion<LanguageCode, string>
@@ -33,9 +35,10 @@ export type Engine =
 
 export interface Options<
   Engines extends Record<string, Engine> = Record<never, Engine>,
-  EngineName extends keyof typeof defaultEngines | keyof Engines =
-    | keyof typeof defaultEngines
-    | keyof Engines,
+  EngineName extends LiteralUnion<keyof typeof defaultEngines, keyof Engines> = LiteralUnion<
+    keyof typeof defaultEngines,
+    keyof Engines
+  >,
 > {
   /** source language - default: 'en' */
   from?: LiteralUnion<LanguageCode, string>
@@ -52,6 +55,9 @@ export interface Options<
 
   /** custom url for specific engines */
   url?: string
+
+  /** override for url params for engines that supports it */
+  overrideParams?: Record<string, string>
 
   /** cache expiration time, default: never */
   cache?: number

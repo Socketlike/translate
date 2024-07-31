@@ -2,8 +2,8 @@ import ISO6391 from 'iso-639-1'
 
 import cache from 'memory-cache'
 
-import defaultEngines from '@engines'
-import { Engine, Options } from '@types'
+import defaultEngines from './engines'
+import { Engine, Options } from './types'
 
 export const translate = async <Engines extends Record<string, Engine> = Record<never, Engine>>(
   text: string,
@@ -29,6 +29,11 @@ export const translate = async <Engines extends Record<string, Engine> = Record<
   const engineName = opt.engine || 'google'
   const engine = engines[engineName]
 
+  const overrideParams =
+    typeof opt.overrideParams === 'object' && !Array.isArray(opt.overrideParams)
+      ? opt.overrideParams
+      : {}
+
   if (!engine) throw new Error(`invalid engine ${String(engineName)}`)
 
   const fromRaw = opt.from || typeof opt.from === 'string' ? opt.from : 'en'
@@ -51,12 +56,12 @@ export const translate = async <Engines extends Record<string, Engine> = Record<
 
   if (engine.needkey && !key) throw new Error(`engine ${String(engineName)} requires an API key`)
 
-  return fetch(...engine.fetch({ from, to, key: key!, url, text }))
+  return fetch(...engine.fetch({ from, to, key: key!, url, overrideParams, text }))
     .then(engine.parse)
     .then((translation) => cache.put(id, translation, cacheTime))
 }
 
-export * from '@types'
+export * from './types'
 
 export default translate
 

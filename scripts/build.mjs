@@ -6,10 +6,11 @@ await build(
     dts: true,
     entry: ['src/index.ts'],
     format: 'cjs',
-    minify: true,
+    minify: false,
     outDir: 'dist',
-    platform: 'node',
+    platform: 'neutral',
     splitting: false,
+    skipNodeModulesBundle: true,
     tsconfig: './tsconfig.json',
   }),
 )

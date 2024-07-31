@@ -1,4 +1,4 @@
-build/Release
+dist/
 node_modules/
 
 *.tgz

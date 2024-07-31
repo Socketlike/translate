@@ -1,4 +1,4 @@
-import { Engine } from '@types'
+import { Engine } from '../types'
 
 export const lingva: Engine = {
   needkey: false,
