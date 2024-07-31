@@ -5,9 +5,10 @@ import cache from 'memory-cache'
 import defaultEngines from './engines'
 import { Engine, Options } from './types'
 
-export const translate = async <Engines extends Record<string, Engine> = Record<never, Engine>>(
+/** do not touch this function's generics, ever! */
+export const translate = async <CustomEngines extends Record<never, Engine>>(
   text: string,
-  options?: Options<Engines>,
+  options?: Options<CustomEngines>,
 ): Promise<string> => {
   const {
     url,
@@ -17,14 +18,13 @@ export const translate = async <Engines extends Record<string, Engine> = Record<
   } = {
     from: 'en',
     to: 'en',
-    engine: 'google',
     ...options,
   }
 
   const engines = {
     ...defaultEngines,
-    ...opt.engines!,
-  }
+    ...opt.engines,
+  } as typeof defaultEngines & CustomEngines
 
   const engineName = opt.engine || 'google'
   const engine = engines[engineName]

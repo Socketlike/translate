@@ -31,13 +31,7 @@ export interface EngineWithoutKey extends Omit<EngineWithKey, 'fetch' | 'needkey
 
 export type Engine = EngineWithKey | EngineWithoutKey
 
-export interface Options<
-  Engines extends Record<string, Engine> = Record<never, Engine>,
-  EngineName extends LiteralUnion<keyof typeof defaultEngines, keyof Engines> = LiteralUnion<
-    keyof typeof defaultEngines,
-    keyof Engines
-  >,
-> {
+export interface Options<CustomEngines extends Record<never, Engine>> {
   /** source text language, default: 'en' */
   from?: LiteralUnion<LanguageCode, string>
   /** target language, default: 'en' */
@@ -47,9 +41,11 @@ export interface Options<
   key?: string
 
   /** translation engine name, default: 'google' */
-  engine?: EngineName
+  engine?: CustomEngines extends Record<string, Engine>
+    ? LiteralUnion<keyof typeof defaultEngines, keyof CustomEngines>
+    : keyof typeof defaultEngines
   /** custom engines definition */
-  engines?: Engines
+  engines?: CustomEngines
 
   /** custom url for specific engines */
   url?: string
