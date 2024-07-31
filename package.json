@@ -1,6 +1,6 @@
 {
   "name": "@sckt/translate",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "an opinionated API for translator engines (fork of github:franciscop/translate)",
   "homepage": "https://github.com/Socketlike/translate",
   "repository": {
