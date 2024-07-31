@@ -57,31 +57,73 @@ console.log(text) // "Hola mundo"
 
 ## Options
 
-```ts
-export interface Options<
-  Engines extends Record<string, Engine> = Record<never, Engine>,
-  EngineName extends LiteralUnion<keyof typeof defaultEngines, keyof Engines> = LiteralUnion<
-    keyof typeof defaultEngines,
-    keyof Engines
-  >,
-> {
-  /** source language - default: 'en' */
-  from?: LiteralUnion<LanguageCode, string>
-  /** target language - default: 'en' */
-  to?: LiteralUnion<LanguageCode, string>
+This is a simplified version of `Options` & `Engine` and does not accurately represent its typings.
 
-  /** api key */
+```ts
+interface EngineFetchOptions<NeedKey extends boolean> {
+  from: string
+  overrideParams?: Record<string, string>
+  key: NeedKey extends true ? string : string | undefined
+  text: string
+  to: string
+  url?: string
+}
+
+interface EngineWithKey {
+  fetch: (
+    options: EngineFetchOptions<true>,
+  ) => [string | URL, RequestInit?] /* global.fetch() props */
+
+  extraSourceLanguages?: string[]
+  extraTargetLanguages?: string[]
+
+  needkey: true
+
+  parse: (res: Response) => string | Promise<string>
+}
+
+interface EngineWithoutKey extends Omit<EngineWithKey, 'fetch' | 'needkey'> {
+  fetch: (
+    options: EngineFetchOptions<false>,
+  ) => [string | URL, RequestInit?] /* global.fetch() props */
+
+  needkey: false
+}
+
+interface Options {
+  /** source text language, default: 'en' */
+  from?: string
+  /** target language, default: 'en' */
+  to?: string
+
+  /** api key, required for  */
   key?: string
 
-  /** translation engine name - default: 'google' */
-  engine?: EngineName
+  /** translation engine name, default: 'google' */
+  engine?: string
   /** custom engines definition */
-  engines?: Engines
+  engines?: Record<string, EngineWithKey | EngineWithoutKey>
 
   /** custom url for specific engines */
   url?: string
 
-  /** override for url params for engines that supports it */
+  /**
+   * override for url params for engines that supports it,
+   * e.g. simplytranslate:
+   *
+   * @example
+   * translate(
+   *   'test',
+   *   {
+   *    engine: 'simplytranslate',
+   *    to: 'es',
+   *    // tells SimplyTranslate to use the `reverso` engine
+   *    // without override: https://simplytranslate.org/api/translate?engine=google...
+   *    // with override: https://simplytranslate.org/api/translate?engine=reverso...
+   *    overrideParams: { engine: 'reverso' }
+   *   }
+   * )
+   **/
   overrideParams?: Record<string, string>
 
   /** cache expiration time, default: never */
@@ -91,7 +133,7 @@ export interface Options<
 
 ## Engines
 
-Default engines (use by setting the `engine` option):
+Default engines (used in the `engine` option):
 
 - **`deepl`**: ([demo](https://www.deepl.com/en/translator)): A rapidly growing popular translation
   engine built with Machine Learning.
@@ -118,9 +160,9 @@ Custom engines:
 import translate, { Engine } from '@sckt/translate'
 
 /**
- * imagine in your head that we have a translation engine hosted at `localhost`,
+ * for example, let's say we have a translator engine hosted at `localhost`,
  *
- * endpoint is `localhost/v1/translate`
+ * endpoint is `api/v1/translate`, method is POST
  *
  * takes a body of shape: {
  *   from: string,
@@ -137,6 +179,7 @@ import translate, { Engine } from '@sckt/translate'
  **/
 const localhost: Engine = {
   needkey: false,
+
   fetch: ({ from, text, to }) => [
     new URL('api/v1/translate', 'http://127.0.0.1'),
     {
@@ -148,10 +191,12 @@ const localhost: Engine = {
       }),
     },
   ],
+
   extraSourceLanguages: ['auto'],
+
   parse: (res) =>
     res.json().then((_) => {
-      // tfw we can't cast unknown to something else in func args
+      // since _ is unknown and we cannot cast it in the arguments, we must cast it here
       const body = _ as { translation?: string; error?: string }
 
       if (!body?.translation) throw new Error('no response')
@@ -162,7 +207,11 @@ const localhost: Engine = {
 }
 
 // we may now use the engine impl we created
-await translate('test', { engines: { localhost }, engine: 'localhost', from: 'auto' })
+await translate('test', {
+  engines: { localhost },
+  engine: 'localhost',
+  to: 'es',
+})
   .then(console.log)
   .catch(console.error)
 ```
